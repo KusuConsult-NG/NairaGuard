@@ -1,0 +1,132 @@
+{
+  "paths": {
+    "raw_data": "datasets/raw",
+    "processed_data": "datasets/processed",
+    "reports": "reports",
+    "models": "models",
+    "logs": "logs"
+  },
+  "collection": {
+    "target_images_per_class": 1000,
+    "denominations": ["100", "200", "500", "1000"],
+    "conditions": [
+      "good_lighting",
+      "poor_lighting", 
+      "bright_lighting",
+      "new_condition",
+      "worn_condition",
+      "damaged_condition",
+      "front_view",
+      "back_view",
+      "angled_view"
+    ],
+    "authenticity": ["genuine", "fake"],
+    "image_sources": {
+      "genuine": {
+        "cbn_official": "https://cbn.gov.ng/currency/",
+        "bank_images": "https://banks.com/naira-notes/",
+        "museum_collections": "https://museums.com/currency/"
+      },
+      "fake": {
+        "seized_evidence": "https://lawenforcement.gov.ng/evidence/",
+        "bank_reports": "https://banks.com/counterfeit-reports/",
+        "training_materials": "https://training.gov.ng/counterfeit/"
+      }
+    }
+  },
+  "preprocessing": {
+    "train_ratio": 0.7,
+    "val_ratio": 0.2,
+    "test_ratio": 0.1,
+    "augmentation_factor": 3,
+    "quality_enhancement": true,
+    "target_resolution": [224, 224],
+    "normalization": {
+      "mean": [0.485, 0.456, 0.406],
+      "std": [0.229, 0.224, 0.225]
+    },
+    "augmentation_techniques": {
+      "rotation": {"limit": 15, "probability": 0.5},
+      "brightness_contrast": {"brightness_limit": 0.2, "contrast_limit": 0.2, "probability": 0.5},
+      "hue_saturation": {"hue_shift_limit": 20, "sat_shift_limit": 30, "val_shift_limit": 20, "probability": 0.5},
+      "gaussian_noise": {"var_limit": [10.0, 50.0], "probability": 0.3},
+      "gaussian_blur": {"blur_limit": 3, "probability": 0.2},
+      "motion_blur": {"blur_limit": 3, "probability": 0.2},
+      "random_shadow": {"probability": 0.2},
+      "coarse_dropout": {"max_holes": 8, "max_height": 32, "max_width": 32, "probability": 0.3}
+    }
+  },
+  "validation": {
+    "min_resolution": [224, 224],
+    "max_file_size_mb": 10,
+    "min_file_size_kb": 10,
+    "min_quality_score": 100,
+    "max_corruption_rate": 0.05,
+    "min_images_per_class": 100,
+    "max_class_imbalance_ratio": 0.5,
+    "required_denominations": ["100", "200", "500", "1000"],
+    "required_conditions": [
+      "good_lighting",
+      "poor_lighting",
+      "bright_lighting",
+      "new_condition",
+      "worn_condition",
+      "damaged_condition",
+      "front_view",
+      "back_view",
+      "angled_view"
+    ]
+  },
+  "cloud_storage": {
+    "enabled": false,
+    "provider": "aws",
+    "bucket_name": "fake-naira-detection-dataset",
+    "region": "us-east-1",
+    "sync_enabled": true,
+    "encryption": "AES256",
+    "public_access": false,
+    "retention_policy": {
+      "enabled": false,
+      "days": 365
+    }
+  },
+  "quality_control": {
+    "duplicate_detection": true,
+    "naming_convention_check": true,
+    "metadata_validation": true,
+    "visual_inspection_sample": 0.1,
+    "automated_quality_scoring": true,
+    "manual_review_threshold": 0.8
+  },
+  "reporting": {
+    "generate_visualizations": true,
+    "export_formats": ["json", "csv", "html"],
+    "include_statistics": true,
+    "include_recommendations": true,
+    "save_intermediate_results": true
+  },
+  "notifications": {
+    "enabled": false,
+    "email": {
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587,
+      "username": "",
+      "password": "",
+      "recipients": []
+    },
+    "slack": {
+      "webhook_url": "",
+      "channel": "#data-pipeline"
+    }
+  },
+  "logging": {
+    "level": "INFO",
+    "file_logging": true,
+    "console_logging": true,
+    "log_rotation": {
+      "enabled": true,
+      "max_size_mb": 10,
+      "backup_count": 5
+    }
+  }
+}

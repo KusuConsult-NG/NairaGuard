@@ -1,0 +1,76 @@
+{
+  "validation_date": "2025-10-06T22:08:37.200991",
+  "dataset_path": "datasets/processed",
+  "total_images": 0,
+  "quality_issues": [],
+  "completeness_issues": [
+    "Insufficient genuine images: 0 (minimum: 100)",
+    "Insufficient fake images: 0 (minimum: 100)"
+  ],
+  "consistency_issues": [
+    "Missing field 'total_images' in datasets/processed/metadata/processing_report.json",
+    "Missing field 'collection_date' in datasets/processed/metadata/processing_report.json",
+    "Missing field 'collection_date' in datasets/processed/metadata/validation_report.json"
+  ],
+  "statistics": {
+    "total_images": 0,
+    "dataset_size_mb": 0.0,
+    "average_image_size_mb": 0,
+    "resolution_distribution": {},
+    "quality_distribution": {},
+    "class_distribution": {},
+    "split_distribution": {},
+    "valid_images": 0,
+    "corrupted_images": 0,
+    "low_resolution_images": 0,
+    "oversized_images": 0,
+    "undersized_images": 0,
+    "low_quality_images": 0,
+    "file_size_distribution": {},
+    "quality_score_distribution": [],
+    "by_authenticity": {
+      "genuine": 0,
+      "fake": 0
+    },
+    "by_denomination": {},
+    "by_condition": {},
+    "by_split": {}
+  },
+  "recommendations": [
+    "Collect more images to meet minimum requirements per class",
+    "Balance genuine and fake image counts",
+    "Ensure coverage of all denominations and conditions",
+    "Standardize file naming conventions",
+    "Remove duplicate images",
+    "Ensure metadata files are complete and consistent",
+    "Consider collecting more images for better model performance"
+  ],
+  "structure_valid": true,
+  "image_statistics": {
+    "total_images": 0,
+    "valid_images": 0,
+    "corrupted_images": 0,
+    "low_resolution_images": 0,
+    "oversized_images": 0,
+    "undersized_images": 0,
+    "low_quality_images": 0,
+    "resolution_distribution": {},
+    "file_size_distribution": {},
+    "quality_score_distribution": []
+  },
+  "corruption_rate": 0,
+  "quality_valid": true,
+  "completeness_statistics": {
+    "by_authenticity": {
+      "genuine": 0,
+      "fake": 0
+    },
+    "by_denomination": {},
+    "by_condition": {},
+    "by_split": {}
+  },
+  "completeness_valid": false,
+  "naming_patterns": {},
+  "duplicate_files": 0,
+  "consistency_valid": false
+}

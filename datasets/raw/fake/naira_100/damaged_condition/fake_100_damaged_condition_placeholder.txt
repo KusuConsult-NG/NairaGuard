@@ -1,0 +1,2 @@
+Sample data for fake 100 naira (damaged_condition)
+Collection timestamp: 2025-10-06T22:08:37.215488

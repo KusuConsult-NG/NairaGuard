@@ -1,0 +1,143 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+env:
+  DOCKER_REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # =============================================================================
+  # CREATE RELEASE
+  # =============================================================================
+  create-release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Generate changelog
+      id: changelog
+      run: |
+        # Generate changelog from git commits
+        git log --pretty=format:"- %s" $(git describe --tags --abbrev=0 HEAD^)..HEAD > CHANGELOG.md
+        echo "changelog<<EOF" >> $GITHUB_OUTPUT
+        cat CHANGELOG.md >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          ## What's Changed
+          ${{ steps.changelog.outputs.changelog }}
+          
+          ## Docker Images
+          - `${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}`
+          - `${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:latest`
+          
+          ## Installation
+          ```bash
+          docker pull ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}
+          ```
+        draft: false
+        prerelease: false
+
+  # =============================================================================
+  # BUILD AND PUSH DOCKER IMAGES
+  # =============================================================================
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    needs: create-release
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Log in to Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.DOCKER_REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Extract metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: ${{ env.DOCKER_REGISTRY }}/${{ env.IMAGE_NAME }}
+        tags: |
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=raw,value=latest
+          
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # =============================================================================
+  # DEPLOY TO PRODUCTION
+  # =============================================================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [create-release, build-and-push]
+    environment: production
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Deploy to production
+      run: |
+        echo "Deploying version ${{ github.ref_name }} to production..."
+        # Add your production deployment commands here
+        # Example: kubectl apply -f k8s/production/
+        # Example: helm upgrade fake-naira-detection ./helm-chart --set image.tag=${{ github.ref_name }}
+
+  # =============================================================================
+  # NOTIFY DEPLOYMENT
+  # =============================================================================
+  notify-deployment:
+    name: Notify Deployment
+    runs-on: ubuntu-latest
+    needs: [create-release, build-and-push, deploy-production]
+    if: always()
+    
+    steps:
+    - name: Notify successful deployment
+      if: ${{ needs.deploy-production.result == 'success' }}
+      run: |
+        echo "Successfully deployed version ${{ github.ref_name }} to production! 🚀"
+        # Add notification logic here (Slack, email, etc.)
+        
+    - name: Notify deployment failure
+      if: ${{ needs.deploy-production.result == 'failure' }}
+      run: |
+        echo "Failed to deploy version ${{ github.ref_name }} to production! ❌"
+        # Add notification logic here (Slack, email, etc.)

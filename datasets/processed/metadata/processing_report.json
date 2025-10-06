@@ -1,0 +1,22 @@
+{
+  "processing_date": "2025-10-06T22:08:37.249054",
+  "total_processed": 0,
+  "by_split": {
+    "train": 0,
+    "validation": 0,
+    "test": 0
+  },
+  "by_authenticity": {
+    "genuine": 0,
+    "fake": 0
+  },
+  "quality_metrics": {
+    "average_file_size": 0,
+    "average_resolution": [
+      0,
+      0
+    ],
+    "corrupted_images": 0,
+    "quality_distribution": {}
+  }
+}
