@@ -22,21 +22,38 @@ fake-naira-detection/
 - Python (v3.8+)
 - Git
 
-### Frontend Setup
+### 1. Clone and Setup
+```bash
+git clone https://github.com/KusuConsult-NG/NairaGuard.git
+cd NairaGuard
+```
+
+### 2. Setup AI Model
+```bash
+# Install Python dependencies
+pip install -r backend/requirements.txt
+
+# Create the AI model
+python setup_model.py
+```
+
+### 3. Start Backend
+```bash
+cd backend
+python main.py
+```
+
+### 4. Start Frontend
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### Backend Setup
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
+### 5. Access the App
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8000
+- API Docs: http://localhost:8000/docs
 
 ## 🧠 Features
 - **Image Upload**: Drag & drop interface for naira note images

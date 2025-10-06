@@ -107,6 +107,9 @@ temp/
 models/*.pkl
 models/*.h5
 models/*.joblib
+models/saved/*.h5
+models/saved/*.pkl
+models/saved/*.onnx
 datasets/*.zip
 datasets/*.tar.gz
 datasets/*.rar
