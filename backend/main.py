@@ -164,7 +164,7 @@ def process_uploaded_image(file: UploadFile) -> np.ndarray:
     
     # Convert to RGB if necessary
     if pil_image.mode != 'RGB':
-        pil_image = pil_image.convert('RGB')
+        pil_image = pil_image.convert('RGB')  # type: ignore[assignment]
     
     # Convert to numpy array
     image_array = np.array(pil_image)

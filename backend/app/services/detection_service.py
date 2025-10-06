@@ -51,7 +51,7 @@ class DetectionService:
             image = image.astype(np.float32) / 255.0
             
             # Add batch dimension
-            image = np.expand_dims(image, axis=0)
+            image = np.expand_dims(image, axis=0)  # type: ignore[assignment]
             
             return image  # type: ignore[return-value,assignment]
             
@@ -114,7 +114,7 @@ class DetectionService:
         # Look for small text patterns
         kernel = np.ones((3, 3), np.uint8)
         dilated = cv2.dilate(gray_image, kernel, iterations=1)
-        return np.std(dilated) > 30  # Arbitrary threshold
+        return bool(np.std(dilated) > 30)  # Arbitrary threshold
     
     def _detect_color_consistency(self, image: np.ndarray) -> bool:
         """Detect color consistency (simplified)"""
