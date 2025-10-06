@@ -8,7 +8,7 @@ import os
 import sys
 import logging
 from pathlib import Path
-from typing import Tuple, List, Dict, Optional, Union
+from typing import Tuple, List, Dict, Optional, Union, Any
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -17,6 +17,7 @@ from datetime import datetime
 import json
 import pickle
 
+import cv2
 import tensorflow as tf
 from tensorflow.keras.applications import MobileNetV2, EfficientNetB0
 from tensorflow.keras.applications.mobilenet_v2 import preprocess_input as mobilenet_preprocess
@@ -166,7 +167,9 @@ class CNNAutoDetector:
         
         # Phase 1: Train only the classification head
         logger.info("Phase 1: Training classification head...")
-        history1 = self.model.fit(
+        if self.model is None:
+            raise ValueError("Model not initialized")
+        history1 = self.model.fit(  # type: ignore[union-attr]
             train_generator,
             validation_data=val_generator,
             epochs=epochs,
@@ -176,16 +179,16 @@ class CNNAutoDetector:
         
         # Phase 2: Fine-tune the entire model
         logger.info("Phase 2: Fine-tuning entire model...")
-        self.model.layers[0].trainable = True
+        self.model.layers[0].trainable = True  # type: ignore[union-attr]
         
         # Recompile with lower learning rate
-        self.model.compile(
+        self.model.compile(  # type: ignore[union-attr]
             optimizer=Adam(learning_rate=0.0001),
             loss='categorical_crossentropy',
             metrics=['accuracy', 'precision', 'recall']
         )
         
-        history2 = self.model.fit(
+        history2 = self.model.fit(  # type: ignore[union-attr]
             train_generator,
             validation_data=val_generator,
             epochs=fine_tune_epochs,
@@ -195,7 +198,7 @@ class CNNAutoDetector:
         
         # Combine histories
         combined_history = self._combine_histories(history1, history2)
-        self.history = combined_history
+        self.history = combined_history  # type: ignore[assignment]
         
         return combined_history
     
@@ -369,13 +372,13 @@ class BaselineDetector:
         # Train model
         logger.info(f"Training {self.model_type} model...")
         self.model = self.model_configs[self.model_type]
-        self.model.fit(X_train_scaled, y_train)
+        self.model.fit(X_train_scaled, y_train)  # type: ignore[union-attr,attr-defined]
         
         # Evaluate on validation set
-        y_pred = self.model.predict(X_val_scaled)
+        y_pred = self.model.predict(X_val_scaled)  # type: ignore[union-attr,attr-defined]
         
         metrics = {
-            'train_accuracy': accuracy_score(y_train, self.model.predict(X_train_scaled)),
+            'train_accuracy': accuracy_score(y_train, self.model.predict(X_train_scaled)),  # type: ignore[union-attr,attr-defined]
             'val_accuracy': accuracy_score(y_val, y_pred),
             'val_precision': precision_score(y_val, y_pred),
             'val_recall': recall_score(y_val, y_pred),
@@ -438,7 +441,7 @@ class BaselineDetector:
         # Texture features (LBP-like)
         # Calculate local binary pattern
         lbp = self._calculate_lbp(gray)
-        lbp_hist = cv2.calcHist([lbp], [0], None, [256], [0, 256])
+        lbp_hist = cv2.calcHist([lbp], [0], None, [256], [0, 256])  # type: ignore[list-item]
         features.extend(lbp_hist.flatten())
         
         # Edge features
@@ -513,7 +516,7 @@ class ModelEvaluator:
         Returns:
             Comparison summary
         """
-        comparison = {
+        comparison: Dict[str, Any] = {
             'models': list(results.keys()),
             'metrics': {},
             'best_model': None,
@@ -585,7 +588,7 @@ class ModelEvaluator:
         plt.savefig(self.output_dir / f'{model_name}_training_history.png', dpi=300, bbox_inches='tight')
         plt.close()
     
-    def plot_confusion_matrix(self, cm: np.ndarray, model_name: str, class_names: List[str] = None):
+    def plot_confusion_matrix(self, cm: np.ndarray, model_name: str, class_names: Optional[List[str]] = None):
         """Plot confusion matrix"""
         if class_names is None:
             class_names = ['Genuine', 'Fake']

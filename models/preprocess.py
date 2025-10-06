@@ -8,7 +8,7 @@ import os
 import sys
 import logging
 from pathlib import Path
-from typing import Tuple, List, Optional, Union
+from typing import Tuple, List, Dict, Any, Optional, Union
 import numpy as np
 import cv2
 from PIL import Image
@@ -325,7 +325,7 @@ class ImagePreprocessor:
         Returns:
             Dictionary with preprocessing statistics
         """
-        stats = {
+        stats: Dict[str, Any] = {
             "total_images": 0,
             "image_sizes": [],
             "aspect_ratios": [],

@@ -8,7 +8,7 @@ import os
 import sys
 import logging
 from pathlib import Path
-from typing import Tuple, Dict, Optional, Union
+from typing import Tuple, Dict, Optional, Union, List
 import numpy as np
 import json
 import pickle
@@ -243,7 +243,7 @@ class ModelOptimizer:
             logger.info("Converting model to ONNX format...")
             
             if output_path is None:
-                output_path = self.model_path.parent / f"{self.model_path.stem}.onnx"
+                output_path = str(self.model_path.parent / f"{self.model_path.stem}.onnx")
             
             # Convert to ONNX
             spec = (tf.TensorSpec((None, *self.input_shape), tf.float32, name="input"),)

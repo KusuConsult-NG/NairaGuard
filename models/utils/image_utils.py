@@ -48,13 +48,13 @@ def detect_edges(image: np.ndarray) -> np.ndarray:
         if len(image.shape) == 3:
             gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         else:
-            gray = image
+            gray = image  # type: ignore[assignment]
         
         # Apply Gaussian blur
-        blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+        blurred = cv2.GaussianBlur(gray, (5, 5), 0)  # type: ignore[assignment]
         
         # Apply Canny edge detection
-        edges = cv2.Canny(blurred, 50, 150)
+        edges = cv2.Canny(blurred, 50, 150)  # type: ignore[assignment]
         
         return edges
     except Exception as e:
@@ -68,11 +68,11 @@ def detect_corners(image: np.ndarray) -> np.ndarray:
         if len(image.shape) == 3:
             gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         else:
-            gray = image
+            gray = image  # type: ignore[assignment]
         
         # Apply Harris corner detection
-        corners = cv2.cornerHarris(gray, 2, 3, 0.04)
-        corners = cv2.dilate(corners, None)
+        corners = cv2.cornerHarris(gray, 2, 3, 0.04)  # type: ignore[assignment]
+        corners = cv2.dilate(corners, None)  # type: ignore[assignment]
         
         return corners
     except Exception as e:
@@ -86,10 +86,10 @@ def extract_text_regions(image: np.ndarray) -> List[np.ndarray]:
         if len(image.shape) == 3:
             gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         else:
-            gray = image
+            gray = image  # type: ignore[assignment]
         
         # Apply threshold
-        _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)  # type: ignore[assignment]
         
         # Find contours
         contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
@@ -118,7 +118,7 @@ def detect_watermark(image: np.ndarray) -> bool:
         if len(image.shape) == 3:
             gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         else:
-            gray = image
+            gray = image  # type: ignore[assignment]
         
         # Apply edge detection
         edges = detect_edges(gray)
@@ -139,7 +139,7 @@ def detect_security_thread(image: np.ndarray) -> bool:
         if len(image.shape) == 3:
             gray = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
         else:
-            gray = image
+            gray = image  # type: ignore[assignment]
         
         # Apply edge detection
         edges = detect_edges(gray)
@@ -188,15 +188,15 @@ def load_and_preprocess_images(data_path: str, target_size: Tuple[int, int] = (2
         images = []
         labels = []
         
-        data_path = Path(data_path)
+        data_path = Path(data_path)  # type: ignore[assignment]
         
         # Get all image files
         image_extensions = {'.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.webp'}
         image_files = []
         
         for ext in image_extensions:
-            image_files.extend(data_path.glob(f'**/*{ext}'))
-            image_files.extend(data_path.glob(f'**/*{ext.upper()}'))
+            image_files.extend(data_path.glob(f'**/*{ext}'))  # type: ignore[attr-defined]
+            image_files.extend(data_path.glob(f'**/*{ext.upper()}'))  # type: ignore[attr-defined]
         
         logger.info(f"Found {len(image_files)} image files")
         

@@ -336,7 +336,9 @@ class ModelInference:
         image_batch = np.expand_dims(image, axis=0)
         
         # Make prediction
-        probabilities = self.model.predict(image_batch, verbose=0)[0]
+        if self.model is None:
+            raise ValueError("Model not loaded")
+        probabilities = self.model.predict(image_batch, verbose=0)[0]  # type: ignore[union-attr]
         predicted_class = np.argmax(probabilities)
         confidence = float(np.max(probabilities))
         
@@ -348,18 +350,20 @@ class ModelInference:
     
     def _predict_tflite(self, image: np.ndarray) -> Dict:
         """Predict using TensorFlow Lite model"""
+        if self.model is None:
+            raise ValueError("Model not loaded")
         # Get input and output details
-        input_details = self.model.get_input_details()
-        output_details = self.model.get_output_details()
+        input_details = self.model.get_input_details()  # type: ignore[union-attr]
+        output_details = self.model.get_output_details()  # type: ignore[union-attr]
         
         # Set input
-        self.model.set_tensor(input_details[0]['index'], np.expand_dims(image, axis=0))
+        self.model.set_tensor(input_details[0]['index'], np.expand_dims(image, axis=0))  # type: ignore[union-attr]
         
         # Run inference
-        self.model.invoke()
+        self.model.invoke()  # type: ignore[union-attr]
         
         # Get output
-        probabilities = self.model.get_tensor(output_details[0]['index'])[0]
+        probabilities = self.model.get_tensor(output_details[0]['index'])[0]  # type: ignore[union-attr]
         predicted_class = np.argmax(probabilities)
         confidence = float(np.max(probabilities))
         
@@ -371,12 +375,14 @@ class ModelInference:
     
     def _predict_onnx(self, image: np.ndarray) -> Dict:
         """Predict using ONNX model"""
+        if self.model is None:
+            raise ValueError("Model not loaded")
         # Prepare input
-        input_name = self.model.get_inputs()[0].name
+        input_name = self.model.get_inputs()[0].name  # type: ignore[union-attr]
         input_data = np.expand_dims(image, axis=0).astype(np.float32)
         
         # Make prediction
-        probabilities = self.model.run(None, {input_name: input_data})[0][0]
+        probabilities = self.model.run(None, {input_name: input_data})[0][0]  # type: ignore[union-attr]
         predicted_class = np.argmax(probabilities)
         confidence = float(np.max(probabilities))
         
@@ -400,10 +406,12 @@ class ModelInference:
             features = self.scaler.transform(features.reshape(1, -1))
         
         # Make prediction
+        if self.model is None:
+            raise ValueError("Model not loaded")
         if hasattr(self.model, 'predict_proba'):
-            probabilities = self.model.predict_proba(features)[0]
+            probabilities = self.model.predict_proba(features)[0]  # type: ignore[union-attr]
         else:
-            prediction = self.model.predict(features)[0]
+            prediction = self.model.predict(features)[0]  # type: ignore[union-attr]
             probabilities = [1 - prediction, prediction]
         
         predicted_class = np.argmax(probabilities)
