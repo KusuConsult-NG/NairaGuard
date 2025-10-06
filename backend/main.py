@@ -1,28 +1,30 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File, Depends, status
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-import uvicorn
-import os
-import logging
-from pathlib import Path
-from datetime import datetime
-from typing import Optional, Dict, Any, List
-import numpy as np
-from PIL import Image
+# Standard library imports
 import io
 import json
+import logging
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+# Third-party imports
+import numpy as np
+import uvicorn
+from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from PIL import Image
 
 # Add project root to path
-import sys
-
 sys.path.append(str(Path(__file__).parent.parent))
 
 try:
-    from app.routers import detection, health, auth
     from app.core.config import settings
-    from app.core.database import get_db, engine, Base
-    from app.models.detection import DetectionRequest, DetectionResponse, DetectionLog
+    from app.core.database import Base, engine, get_db
+    from app.models.detection import DetectionLog, DetectionRequest, DetectionResponse
+    from app.routers import auth, detection, health
 except ImportError:
     # Fallback for when running from project root
     from backend.app.routers import detection, health, auth
@@ -33,6 +35,7 @@ except ImportError:
         DetectionResponse,
         DetectionLog,
     )
+
 from models.model_inference import ModelInference
 from models.preprocess import ImagePreprocessor
 

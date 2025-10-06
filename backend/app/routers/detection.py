@@ -1,18 +1,22 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
-from fastapi.responses import JSONResponse
-from typing import List, Optional
+# Standard library imports
+import logging
 import os
 import uuid
 from datetime import datetime
-import logging
+from typing import List, Optional
 
+# Third-party imports
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi.responses import JSONResponse
+
+# Local imports
 from backend.app.core.config import settings
-from backend.app.services.detection_service import DetectionService
 from backend.app.models.detection import (
-    DetectionResult,
-    DetectionRequest,
     BatchDetectionRequest,
+    DetectionRequest,
+    DetectionResult,
 )
+from backend.app.services.detection_service import DetectionService
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

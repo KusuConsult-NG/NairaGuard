@@ -1,12 +1,13 @@
-from fastapi import APIRouter, HTTPException, Depends, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import datetime, timedelta
 from typing import Optional
+
 import jwt
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 
 from backend.app.core.config import settings
-from backend.app.models.user import User, UserCreate, UserLogin, Token
+from backend.app.models.user import Token, User, UserCreate, UserLogin
 
 router = APIRouter()
 

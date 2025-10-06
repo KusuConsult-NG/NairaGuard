@@ -1,7 +1,8 @@
-from pydantic import BaseModel
-from typing import Optional, List
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Float, DateTime, Text, Boolean
+from typing import List, Optional
+
+from pydantic import BaseModel
+from sqlalchemy import Boolean, Column, DateTime, Float, Integer, String, Text
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()

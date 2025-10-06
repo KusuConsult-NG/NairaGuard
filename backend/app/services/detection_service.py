@@ -1,10 +1,11 @@
+import logging
+import time
+from typing import List, Optional
+
 import cv2
 import numpy as np
 import tensorflow as tf
 from PIL import Image
-import logging
-from typing import List, Optional
-import time
 
 from backend.app.core.config import settings
 from backend.app.models.detection import DetectionResult
