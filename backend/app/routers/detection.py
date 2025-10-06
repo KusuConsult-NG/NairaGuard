@@ -1,15 +1,12 @@
-# Standard library imports
 import logging
 import os
 import uuid
 from datetime import datetime
 from typing import List, Optional
 
-# Third-party imports
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from fastapi.responses import JSONResponse
 
-# Local imports
 from backend.app.core.config import settings
 from backend.app.models.detection import (
     BatchDetectionRequest,

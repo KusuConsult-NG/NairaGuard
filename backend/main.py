@@ -1,4 +1,3 @@
-# Standard library imports
 import io
 import json
 import logging
@@ -8,7 +7,6 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-# Third-party imports
 import numpy as np
 import uvicorn
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
@@ -25,19 +23,21 @@ try:
     from app.core.database import Base, engine, get_db
     from app.models.detection import DetectionLog, DetectionRequest, DetectionResponse
     from app.routers import auth, detection, health
+
+    from models.model_inference import ModelInference
+    from models.preprocess import ImagePreprocessor
 except ImportError:
     # Fallback for when running from project root
-    from backend.app.routers import detection, health, auth
     from backend.app.core.config import settings
-    from backend.app.core.database import get_db, engine, Base
+    from backend.app.core.database import Base, engine, get_db
     from backend.app.models.detection import (
+        DetectionLog,
         DetectionRequest,
         DetectionResponse,
-        DetectionLog,
     )
-
-from models.model_inference import ModelInference
-from models.preprocess import ImagePreprocessor
+    from backend.app.routers import auth, detection, health
+    from models.model_inference import ModelInference
+    from models.preprocess import ImagePreprocessor
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
