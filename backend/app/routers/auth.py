@@ -5,8 +5,8 @@ from typing import Optional
 import jwt
 from passlib.context import CryptContext
 
-from app.core.config import settings
-from app.models.user import User, UserCreate, UserLogin, Token
+from backend.app.core.config import settings
+from backend.app.models.user import User, UserCreate, UserLogin, Token
 
 router = APIRouter()
 

@@ -6,9 +6,9 @@ import uuid
 from datetime import datetime
 import logging
 
-from app.core.config import settings
-from app.services.detection_service import DetectionService
-from app.models.detection import DetectionResult, DetectionRequest, BatchDetectionRequest
+from backend.app.core.config import settings
+from backend.app.services.detection_service import DetectionService
+from backend.app.models.detection import DetectionResult, DetectionRequest, BatchDetectionRequest
 
 router = APIRouter()
 logger = logging.getLogger(__name__)

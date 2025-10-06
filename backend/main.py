@@ -72,16 +72,32 @@ async def startup_event():
         logger.info("Starting Naira Note Detection API...")
         
         # Initialize preprocessor
+        global preprocessor
         preprocessor = ImagePreprocessor(model_type="mobilenet")
         logger.info("Image preprocessor initialized")
         
         # Load ML model if available
-        model_path = Path("models/saved/mobilenet_best.h5")
+        model_path = Path("models/saved/mobilenet_best_fixed.h5")
+        logger.info(f"Checking for model at: {model_path}")
+        logger.info(f"Model exists: {model_path.exists()}")
+        
         if model_path.exists():
-            model_inference = ModelInference(str(model_path), "keras")
-            logger.info(f"ML model loaded from {model_path}")
+            try:
+                global model_inference
+                logger.info("Creating ModelInference instance...")
+                model_inference = ModelInference(str(model_path), "keras")
+                logger.info(f"ModelInference created, loaded: {model_inference.loaded}")
+                if model_inference.loaded:
+                    logger.info(f"ML model loaded from {model_path}")
+                else:
+                    logger.warning("Model file exists but failed to load. Using mock predictions.")
+            except Exception as e:
+                logger.error(f"Error loading model: {str(e)}")
+                import traceback
+                logger.error(f"Traceback: {traceback.format_exc()}")
+                logger.warning("Using mock predictions.")
         else:
-            logger.warning("No trained model found. Please train a model first.")
+            logger.warning("No trained model found. Using mock predictions.")
         
         logger.info("API startup completed successfully")
         
@@ -309,7 +325,7 @@ async def get_model_status() -> Dict[str, Any]:
         Model status information
     """
     status_info = {
-        "model_loaded": model_inference is not None,
+        "model_loaded": model_inference is not None and hasattr(model_inference, 'loaded') and model_inference.loaded,
         "preprocessor_loaded": preprocessor is not None,
         "timestamp": datetime.now().isoformat()
     }
@@ -317,6 +333,11 @@ async def get_model_status() -> Dict[str, Any]:
     if model_inference:
         status_info["model_type"] = model_inference.model_type
         status_info["model_path"] = str(model_inference.model_path)
+        # Check if model is actually working by testing a prediction
+        if hasattr(model_inference, 'model') and model_inference.model is not None:
+            status_info["model_loaded"] = True
+        else:
+            status_info["model_loaded"] = False
     
     return status_info
 

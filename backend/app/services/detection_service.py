@@ -6,8 +6,8 @@ import logging
 from typing import List, Optional
 import time
 
-from app.core.config import settings
-from app.models.detection import DetectionResult
+from backend.app.core.config import settings
+from backend.app.models.detection import DetectionResult
 
 logger = logging.getLogger(__name__)
 
