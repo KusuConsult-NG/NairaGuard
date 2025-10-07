@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  Users, 
-  Shield, 
+import {
+  BarChart3,
+  TrendingUp,
+  Users,
+  Shield,
   Clock,
   CheckCircle,
   XCircle,
@@ -14,23 +14,23 @@ import {
   Eye,
   Calendar,
   Activity,
-  Zap
+  Zap,
 } from 'lucide-react';
-import { 
-  LineChart, 
-  Line, 
-  AreaChart, 
-  Area, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
   BarChart,
-  Bar
+  Bar,
 } from 'recharts';
 import { ApiService } from '../services/api';
 import { DetectionResult } from '../context/AppContext';
@@ -53,22 +53,28 @@ const AdminDashboard: React.FC = () => {
       setLoading(true);
       const [status, historyData] = await Promise.all([
         ApiService.getModelStatus(),
-        ApiService.getPredictionHistory(1000)
+        ApiService.getPredictionHistory(1000),
       ]);
-      
+
       setModelStatus(status);
       setHistory(historyData.predictions);
-      
+
       // Calculate stats
       const total = historyData.predictions.length;
-      const genuine = historyData.predictions.filter(p => p.predicted_class === 'genuine').length;
-      const fake = historyData.predictions.filter(p => p.predicted_class === 'fake').length;
-      const avgConfidence = historyData.predictions.reduce((sum, p) => sum + p.confidence, 0) / total;
-      
+      const genuine = historyData.predictions.filter(
+        p => p.predicted_class === 'genuine'
+      ).length;
+      const fake = historyData.predictions.filter(
+        p => p.predicted_class === 'fake'
+      ).length;
+      const avgConfidence =
+        historyData.predictions.reduce((sum, p) => sum + p.confidence, 0) /
+        total;
+
       // Calculate hourly data for charts
       const hourlyData = calculateHourlyData(historyData.predictions);
       const dailyData = calculateDailyData(historyData.predictions);
-      
+
       setStats({
         total,
         genuine,
@@ -77,7 +83,7 @@ const AdminDashboard: React.FC = () => {
         accuracy: Math.round((genuine / total) * 100) || 0,
         hourlyData,
         dailyData,
-        recentDetections: historyData.predictions.slice(0, 10)
+        recentDetections: historyData.predictions.slice(0, 10),
       });
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
@@ -92,7 +98,7 @@ const AdminDashboard: React.FC = () => {
       hour: i,
       genuine: 0,
       fake: 0,
-      total: 0
+      total: 0,
     }));
 
     data.forEach(item => {
@@ -107,7 +113,7 @@ const AdminDashboard: React.FC = () => {
 
     return hourly.map(h => ({
       ...h,
-      hour: `${h.hour}:00`
+      hour: `${h.hour}:00`,
     }));
   };
 
@@ -119,7 +125,7 @@ const AdminDashboard: React.FC = () => {
         date: date.toISOString().split('T')[0],
         genuine: 0,
         fake: 0,
-        total: 0
+        total: 0,
       };
     });
 
@@ -138,7 +144,7 @@ const AdminDashboard: React.FC = () => {
 
     return daily.map(d => ({
       ...d,
-      date: new Date(d.date).toLocaleDateString('en-US', { weekday: 'short' })
+      date: new Date(d.date).toLocaleDateString('en-US', { weekday: 'short' }),
     }));
   };
 
@@ -148,12 +154,12 @@ const AdminDashboard: React.FC = () => {
       filename: item.filename,
       predicted_class: item.predicted_class,
       confidence: item.confidence,
-      model_status: item.model_status
+      model_status: item.model_status,
     }));
 
     const csv = [
       Object.keys(csvData[0]).join(','),
-      ...csvData.map(row => Object.values(row).join(','))
+      ...csvData.map(row => Object.values(row).join(',')),
     ].join('\n');
 
     const blob = new Blob([csv], { type: 'text/csv' });
@@ -179,7 +185,7 @@ const AdminDashboard: React.FC = () => {
 
   const pieData = [
     { name: 'Genuine', value: stats.genuine, color: '#10B981' },
-    { name: 'Fake', value: stats.fake, color: '#EF4444' }
+    { name: 'Fake', value: stats.fake, color: '#EF4444' },
   ];
 
   return (
@@ -192,8 +198,12 @@ const AdminDashboard: React.FC = () => {
           className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8"
         >
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-            <p className="text-gray-600">Monitor detection analytics and system performance</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Admin Dashboard
+            </h1>
+            <p className="text-gray-600">
+              Monitor detection analytics and system performance
+            </p>
           </div>
           <div className="flex space-x-3 mt-4 md:mt-0">
             <motion.button
@@ -227,8 +237,12 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Detections</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Detections
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.total}
+                </p>
               </div>
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                 <BarChart3 className="w-6 h-6 text-blue-600" />
@@ -239,8 +253,12 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Genuine Notes</p>
-                <p className="text-2xl font-bold text-green-600">{stats.genuine}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Genuine Notes
+                </p>
+                <p className="text-2xl font-bold text-green-600">
+                  {stats.genuine}
+                </p>
               </div>
               <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
                 <CheckCircle className="w-6 h-6 text-green-600" />
@@ -263,8 +281,12 @@ const AdminDashboard: React.FC = () => {
           <div className="bg-white rounded-xl shadow-lg p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Avg Confidence</p>
-                <p className="text-2xl font-bold text-purple-600">{stats.avgConfidence}%</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Avg Confidence
+                </p>
+                <p className="text-2xl font-bold text-purple-600">
+                  {stats.avgConfidence}%
+                </p>
               </div>
               <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
                 <TrendingUp className="w-6 h-6 text-purple-600" />
@@ -282,15 +304,31 @@ const AdminDashboard: React.FC = () => {
             transition={{ delay: 0.2 }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Daily Detections (Last 7 Days)</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Daily Detections (Last 7 Days)
+            </h3>
             <ResponsiveContainer width="100%" height={300}>
               <AreaChart data={stats.dailyData}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip />
-                <Area type="monotone" dataKey="genuine" stackId="1" stroke="#10B981" fill="#10B981" fillOpacity={0.6} />
-                <Area type="monotone" dataKey="fake" stackId="1" stroke="#EF4444" fill="#EF4444" fillOpacity={0.6} />
+                <Area
+                  type="monotone"
+                  dataKey="genuine"
+                  stackId="1"
+                  stroke="#10B981"
+                  fill="#10B981"
+                  fillOpacity={0.6}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="fake"
+                  stackId="1"
+                  stroke="#EF4444"
+                  fill="#EF4444"
+                  fillOpacity={0.6}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </motion.div>
@@ -302,7 +340,9 @@ const AdminDashboard: React.FC = () => {
             transition={{ delay: 0.3 }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Detection Distribution</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Detection Distribution
+            </h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
@@ -324,8 +364,13 @@ const AdminDashboard: React.FC = () => {
             <div className="flex justify-center space-x-6 mt-4">
               {pieData.map((item, index) => (
                 <div key={index} className="flex items-center space-x-2">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-sm text-gray-600">{item.name}: {item.value}</span>
+                  <div
+                    className="w-3 h-3 rounded-full"
+                    style={{ backgroundColor: item.color }}
+                  />
+                  <span className="text-sm text-gray-600">
+                    {item.name}: {item.value}
+                  </span>
                 </div>
               ))}
             </div>
@@ -339,7 +384,9 @@ const AdminDashboard: React.FC = () => {
           transition={{ delay: 0.4 }}
           className="bg-white rounded-xl shadow-lg p-6 mb-8"
         >
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Hourly Activity (Last 24 Hours)</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Hourly Activity (Last 24 Hours)
+          </h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={stats.hourlyData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -359,7 +406,9 @@ const AdminDashboard: React.FC = () => {
           transition={{ delay: 0.5 }}
           className="bg-white rounded-xl shadow-lg p-6 mb-8"
         >
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Detections</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Recent Detections
+          </h3>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -391,11 +440,13 @@ const AdminDashboard: React.FC = () => {
                       {detection.filename || 'Unknown'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        detection.predicted_class === 'genuine'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          detection.predicted_class === 'genuine'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
                         {detection.predicted_class === 'genuine' ? (
                           <CheckCircle className="w-3 h-3 mr-1" />
                         ) : (
@@ -408,11 +459,13 @@ const AdminDashboard: React.FC = () => {
                       {Math.round(detection.confidence * 100)}%
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        detection.model_status === 'trained_model'
-                          ? 'bg-blue-100 text-blue-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          detection.model_status === 'trained_model'
+                            ? 'bg-blue-100 text-blue-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
                         {detection.model_status}
                       </span>
                     </td>
@@ -431,36 +484,58 @@ const AdminDashboard: React.FC = () => {
             transition={{ delay: 0.6 }}
             className="bg-white rounded-xl shadow-lg p-6"
           >
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">System Status</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              System Status
+            </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${
-                  modelStatus.model_loaded ? 'bg-green-100' : 'bg-red-100'
-                }`}>
-                  <Shield className={`w-8 h-8 ${
-                    modelStatus.model_loaded ? 'text-green-600' : 'text-red-600'
-                  }`} />
+                <div
+                  className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${
+                    modelStatus.model_loaded ? 'bg-green-100' : 'bg-red-100'
+                  }`}
+                >
+                  <Shield
+                    className={`w-8 h-8 ${
+                      modelStatus.model_loaded
+                        ? 'text-green-600'
+                        : 'text-red-600'
+                    }`}
+                  />
                 </div>
                 <h4 className="font-medium text-gray-900">AI Model</h4>
-                <p className={`text-sm ${
-                  modelStatus.model_loaded ? 'text-green-600' : 'text-red-600'
-                }`}>
+                <p
+                  className={`text-sm ${
+                    modelStatus.model_loaded ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
                   {modelStatus.model_loaded ? 'Loaded' : 'Not Loaded'}
                 </p>
               </div>
 
               <div className="text-center">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${
-                  modelStatus.preprocessor_loaded ? 'bg-green-100' : 'bg-red-100'
-                }`}>
-                  <Zap className={`w-8 h-8 ${
-                    modelStatus.preprocessor_loaded ? 'text-green-600' : 'text-red-600'
-                  }`} />
+                <div
+                  className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 ${
+                    modelStatus.preprocessor_loaded
+                      ? 'bg-green-100'
+                      : 'bg-red-100'
+                  }`}
+                >
+                  <Zap
+                    className={`w-8 h-8 ${
+                      modelStatus.preprocessor_loaded
+                        ? 'text-green-600'
+                        : 'text-red-600'
+                    }`}
+                  />
                 </div>
                 <h4 className="font-medium text-gray-900">Preprocessor</h4>
-                <p className={`text-sm ${
-                  modelStatus.preprocessor_loaded ? 'text-green-600' : 'text-red-600'
-                }`}>
+                <p
+                  className={`text-sm ${
+                    modelStatus.preprocessor_loaded
+                      ? 'text-green-600'
+                      : 'text-red-600'
+                  }`}
+                >
                   {modelStatus.preprocessor_loaded ? 'Ready' : 'Not Ready'}
                 </p>
               </div>

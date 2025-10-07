@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  CheckCircle, 
-  XCircle, 
-  AlertTriangle, 
-  RotateCcw, 
-  Download, 
+import {
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+  RotateCcw,
+  Download,
   Share2,
   BarChart3,
   Shield,
@@ -14,7 +14,7 @@ import {
   Camera,
   FileImage,
   ArrowLeft,
-  ArrowRight
+  ArrowRight,
 } from 'lucide-react';
 import { useApp, appActions, DetectionResult } from '../context/AppContext';
 import { ApiService } from '../services/api';
@@ -42,18 +42,54 @@ const DetectionResultPage: React.FC = () => {
       setTimeout(() => {
         setAnalysisDetails({
           securityFeatures: [
-            { name: 'Watermark', detected: Math.random() > 0.3, confidence: 0.85 },
-            { name: 'Security Thread', detected: Math.random() > 0.2, confidence: 0.92 },
-            { name: 'Color-shifting Ink', detected: Math.random() > 0.4, confidence: 0.78 },
-            { name: 'Microprinting', detected: Math.random() > 0.3, confidence: 0.88 },
-            { name: 'Holographic Element', detected: Math.random() > 0.25, confidence: 0.91 },
-            { name: 'Paper Quality', detected: Math.random() > 0.2, confidence: 0.86 }
+            {
+              name: 'Watermark',
+              detected: Math.random() > 0.3,
+              confidence: 0.85,
+            },
+            {
+              name: 'Security Thread',
+              detected: Math.random() > 0.2,
+              confidence: 0.92,
+            },
+            {
+              name: 'Color-shifting Ink',
+              detected: Math.random() > 0.4,
+              confidence: 0.78,
+            },
+            {
+              name: 'Microprinting',
+              detected: Math.random() > 0.3,
+              confidence: 0.88,
+            },
+            {
+              name: 'Holographic Element',
+              detected: Math.random() > 0.25,
+              confidence: 0.91,
+            },
+            {
+              name: 'Paper Quality',
+              detected: Math.random() > 0.2,
+              confidence: 0.86,
+            },
           ],
           riskFactors: [
-            { name: 'Print Quality', risk: Math.random() > 0.7 ? 'High' : 'Low', score: Math.random() * 100 },
-            { name: 'Color Accuracy', risk: Math.random() > 0.6 ? 'Medium' : 'Low', score: Math.random() * 100 },
-            { name: 'Texture Analysis', risk: Math.random() > 0.8 ? 'High' : 'Low', score: Math.random() * 100 }
-          ]
+            {
+              name: 'Print Quality',
+              risk: Math.random() > 0.7 ? 'High' : 'Low',
+              score: Math.random() * 100,
+            },
+            {
+              name: 'Color Accuracy',
+              risk: Math.random() > 0.6 ? 'Medium' : 'Low',
+              score: Math.random() * 100,
+            },
+            {
+              name: 'Texture Analysis',
+              risk: Math.random() > 0.8 ? 'High' : 'Low',
+              score: Math.random() * 100,
+            },
+          ],
         });
         setIsAnalyzing(false);
       }, 2000);
@@ -72,10 +108,12 @@ const DetectionResultPage: React.FC = () => {
       timestamp: new Date().toISOString(),
       result: state.detectionResult,
       analysis: analysisDetails,
-      image: state.imagePreview
+      image: state.imagePreview,
     };
 
-    const blob = new Blob([JSON.stringify(report, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(report, null, 2)], {
+      type: 'application/json',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -94,7 +132,7 @@ const DetectionResultPage: React.FC = () => {
     const shareData = {
       title: 'Naira Note Detection Result',
       text: `Detected: ${state.detectionResult.predicted_class} (${Math.round(state.detectionResult.confidence * 100)}% confidence)`,
-      url: window.location.href
+      url: window.location.href,
     };
 
     try {
@@ -118,7 +156,13 @@ const DetectionResultPage: React.FC = () => {
     );
   }
 
-  const { predicted_class, confidence, probabilities, timestamp, model_status } = state.detectionResult;
+  const {
+    predicted_class,
+    confidence,
+    probabilities,
+    timestamp,
+    model_status,
+  } = state.detectionResult;
   const isGenuine = predicted_class === 'genuine';
   const confidencePercentage = Math.round(confidence * 100);
 
@@ -213,25 +257,30 @@ const DetectionResultPage: React.FC = () => {
                     <XCircle className="w-10 h-10 text-red-600" />
                   )}
                 </motion.div>
-                
-                <h2 className={`text-3xl font-bold mb-2 ${
-                  isGenuine ? 'text-green-600' : 'text-red-600'
-                }`}>
+
+                <h2
+                  className={`text-3xl font-bold mb-2 ${
+                    isGenuine ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
                   {isGenuine ? '✅ Genuine' : '❌ Fake'}
                 </h2>
-                
+
                 <p className="text-gray-600 mb-4">
-                  {isGenuine 
-                    ? 'This naira note appears to be authentic' 
-                    : 'This naira note appears to be counterfeit'
-                  }
+                  {isGenuine
+                    ? 'This naira note appears to be authentic'
+                    : 'This naira note appears to be counterfeit'}
                 </p>
 
                 {/* Confidence Score */}
                 <div className="bg-gray-50 rounded-lg p-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-gray-600">Confidence Score</span>
-                    <span className="text-lg font-bold text-gray-900">{confidencePercentage}%</span>
+                    <span className="text-sm font-medium text-gray-600">
+                      Confidence Score
+                    </span>
+                    <span className="text-lg font-bold text-gray-900">
+                      {confidencePercentage}%
+                    </span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-3">
                     <motion.div
@@ -239,11 +288,11 @@ const DetectionResultPage: React.FC = () => {
                       animate={{ width: `${confidencePercentage}%` }}
                       transition={{ delay: 0.8, duration: 1 }}
                       className={`h-3 rounded-full ${
-                        confidencePercentage > 80 
-                          ? 'bg-green-500' 
-                          : confidencePercentage > 60 
-                          ? 'bg-yellow-500' 
-                          : 'bg-red-500'
+                        confidencePercentage > 80
+                          ? 'bg-green-500'
+                          : confidencePercentage > 60
+                            ? 'bg-yellow-500'
+                            : 'bg-red-500'
                       }`}
                     />
                   </div>
@@ -252,7 +301,9 @@ const DetectionResultPage: React.FC = () => {
 
               {/* Probability Breakdown */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900 mb-3">Probability Breakdown</h3>
+                <h3 className="font-semibold text-gray-900 mb-3">
+                  Probability Breakdown
+                </h3>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-600">Genuine</span>
@@ -273,12 +324,16 @@ const DetectionResultPage: React.FC = () => {
               <div className="mt-6 pt-4 border-t border-gray-200">
                 <div className="flex items-center justify-between text-sm">
                   <span className="text-gray-600">Model Status</span>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    model_status === 'trained_model' 
-                      ? 'bg-green-100 text-green-700' 
-                      : 'bg-yellow-100 text-yellow-700'
-                  }`}>
-                    {model_status === 'trained_model' ? 'Trained Model' : 'Demo Mode'}
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      model_status === 'trained_model'
+                        ? 'bg-green-100 text-green-700'
+                        : 'bg-yellow-100 text-yellow-700'
+                    }`}
+                  >
+                    {model_status === 'trained_model'
+                      ? 'Trained Model'
+                      : 'Demo Mode'}
                   </span>
                 </div>
               </div>
@@ -296,26 +351,33 @@ const DetectionResultPage: React.FC = () => {
                   <Shield className="w-5 h-5 mr-2" />
                   Security Features Analysis
                 </h3>
-                
+
                 {isAnalyzing ? (
                   <LoadingSpinner text="Analyzing security features..." />
                 ) : (
                   <div className="space-y-3">
-                    {analysisDetails.securityFeatures.map((feature: any, index: number) => (
-                      <div key={feature.name} className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">{feature.name}</span>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-xs text-gray-500">
-                            {Math.round(feature.confidence * 100)}%
+                    {analysisDetails.securityFeatures.map(
+                      (feature: any, index: number) => (
+                        <div
+                          key={feature.name}
+                          className="flex items-center justify-between"
+                        >
+                          <span className="text-sm text-gray-600">
+                            {feature.name}
                           </span>
-                          {feature.detected ? (
-                            <CheckCircle className="w-4 h-4 text-green-500" />
-                          ) : (
-                            <XCircle className="w-4 h-4 text-red-500" />
-                          )}
+                          <div className="flex items-center space-x-2">
+                            <span className="text-xs text-gray-500">
+                              {Math.round(feature.confidence * 100)}%
+                            </span>
+                            {feature.detected ? (
+                              <CheckCircle className="w-4 h-4 text-green-500" />
+                            ) : (
+                              <XCircle className="w-4 h-4 text-red-500" />
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      )
+                    )}
                   </div>
                 )}
               </motion.div>
@@ -333,36 +395,42 @@ const DetectionResultPage: React.FC = () => {
                   <AlertTriangle className="w-5 h-5 mr-2" />
                   Risk Assessment
                 </h3>
-                
+
                 <div className="space-y-4">
-                  {analysisDetails.riskFactors.map((factor: any, index: number) => (
-                    <div key={factor.name} className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-600">{factor.name}</span>
-                        <span className={`text-xs px-2 py-1 rounded-full font-medium ${
-                          factor.risk === 'High' 
-                            ? 'bg-red-100 text-red-700' 
-                            : factor.risk === 'Medium'
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : 'bg-green-100 text-green-700'
-                        }`}>
-                          {factor.risk} Risk
-                        </span>
+                  {analysisDetails.riskFactors.map(
+                    (factor: any, index: number) => (
+                      <div key={factor.name} className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-gray-600">
+                            {factor.name}
+                          </span>
+                          <span
+                            className={`text-xs px-2 py-1 rounded-full font-medium ${
+                              factor.risk === 'High'
+                                ? 'bg-red-100 text-red-700'
+                                : factor.risk === 'Medium'
+                                  ? 'bg-yellow-100 text-yellow-700'
+                                  : 'bg-green-100 text-green-700'
+                            }`}
+                          >
+                            {factor.risk} Risk
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className={`h-2 rounded-full ${
+                              factor.risk === 'High'
+                                ? 'bg-red-500'
+                                : factor.risk === 'Medium'
+                                  ? 'bg-yellow-500'
+                                  : 'bg-green-500'
+                            }`}
+                            style={{ width: `${factor.score}%` }}
+                          />
+                        </div>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className={`h-2 rounded-full ${
-                            factor.risk === 'High' 
-                              ? 'bg-red-500' 
-                              : factor.risk === 'Medium'
-                              ? 'bg-yellow-500'
-                              : 'bg-green-500'
-                          }`}
-                          style={{ width: `${factor.score}%` }}
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    )
+                  )}
                 </div>
               </motion.div>
             )}
@@ -385,7 +453,7 @@ const DetectionResultPage: React.FC = () => {
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Home</span>
           </motion.button>
-          
+
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

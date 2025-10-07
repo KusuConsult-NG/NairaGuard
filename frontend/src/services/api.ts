@@ -15,11 +15,13 @@ const api = axios.create({
 
 // Request interceptor
 api.interceptors.request.use(
-  (config) => {
-    console.log(`🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`);
+  config => {
+    console.log(
+      `🚀 API Request: ${config.method?.toUpperCase()} ${config.url}`
+    );
     return config;
   },
-  (error) => {
+  error => {
     console.error('❌ API Request Error:', error);
     return Promise.reject(error);
   }
@@ -27,12 +29,15 @@ api.interceptors.request.use(
 
 // Response interceptor
 api.interceptors.response.use(
-  (response) => {
+  response => {
     console.log(`✅ API Response: ${response.status} ${response.config.url}`);
     return response;
   },
-  (error) => {
-    console.error('❌ API Response Error:', error.response?.data || error.message);
+  error => {
+    console.error(
+      '❌ API Response Error:',
+      error.response?.data || error.message
+    );
     return Promise.reject(error);
   }
 );
@@ -62,11 +67,15 @@ export class ApiService {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response: AxiosResponse<DetectionResult> = await api.post('/predict', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    const response: AxiosResponse<DetectionResult> = await api.post(
+      '/predict',
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
 
     return response.data;
   }
@@ -82,7 +91,7 @@ export class ApiService {
     };
   }> {
     const formData = new FormData();
-    files.forEach((file) => {
+    files.forEach(file => {
       formData.append('files', file);
     });
 
@@ -108,12 +117,17 @@ export class ApiService {
     total_count: number;
     timestamp: string;
   }> {
-    const response: AxiosResponse = await api.get(`/predictions/history?limit=${limit}`);
+    const response: AxiosResponse = await api.get(
+      `/predictions/history?limit=${limit}`
+    );
     return response.data;
   }
 
   // Reload model
-  static async reloadModel(modelPath: string, modelType = 'keras'): Promise<{
+  static async reloadModel(
+    modelPath: string,
+    modelType = 'keras'
+  ): Promise<{
     status: string;
     message: string;
     model_type: string;
@@ -166,7 +180,9 @@ export const handleApiError = (error: any): string => {
 };
 
 // File validation utilities
-export const validateImageFile = (file: File): { valid: boolean; error?: string } => {
+export const validateImageFile = (
+  file: File
+): { valid: boolean; error?: string } => {
   // Check file type
   const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
   if (!allowedTypes.includes(file.type)) {
@@ -192,7 +208,7 @@ export const validateImageFile = (file: File): { valid: boolean; error?: string 
 export const createImagePreview = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = e => {
       if (e.target?.result) {
         resolve(e.target.result as string);
       } else {
@@ -205,24 +221,26 @@ export const createImagePreview = (file: File): Promise<string> => {
 };
 
 // Batch file validation
-export const validateBatchFiles = (files: File[]): { valid: boolean; errors: string[] } => {
+export const validateBatchFiles = (
+  files: File[]
+): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
-  
+
   if (files.length === 0) {
     errors.push('No files selected');
   }
-  
+
   if (files.length > 10) {
     errors.push('Maximum 10 files allowed per batch');
   }
-  
+
   files.forEach((file, index) => {
     const validation = validateImageFile(file);
     if (!validation.valid) {
       errors.push(`File ${index + 1} (${file.name}): ${validation.error}`);
     }
   });
-  
+
   return {
     valid: errors.length === 0,
     errors,

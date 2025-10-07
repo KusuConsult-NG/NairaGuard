@@ -56,10 +56,10 @@ function appReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
     case 'SET_LOADING':
       return { ...state, isLoading: action.payload };
-    
+
     case 'SET_ERROR':
       return { ...state, error: action.payload, isLoading: false };
-    
+
     case 'SET_DETECTION_RESULT':
       return {
         ...state,
@@ -67,7 +67,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
         isLoading: false,
         error: null,
       };
-    
+
     case 'SET_UPLOADED_IMAGE':
       return {
         ...state,
@@ -75,7 +75,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
         imagePreview: action.payload.preview,
         error: null,
       };
-    
+
     case 'CLEAR_DETECTION':
       return {
         ...state,
@@ -84,19 +84,22 @@ function appReducer(state: AppState, action: AppAction): AppState {
         imagePreview: null,
         error: null,
       };
-    
+
     case 'ADD_TO_HISTORY':
       return {
         ...state,
-        detectionHistory: [action.payload, ...state.detectionHistory.slice(0, 49)], // Keep last 50
+        detectionHistory: [
+          action.payload,
+          ...state.detectionHistory.slice(0, 49),
+        ], // Keep last 50
       };
-    
+
     case 'SET_MODEL_STATUS':
       return { ...state, modelStatus: action.payload };
-    
+
     case 'RESET_STATE':
       return initialState;
-    
+
     default:
       return state;
   }
@@ -131,36 +134,36 @@ export const appActions = {
     type: 'SET_LOADING',
     payload: loading,
   }),
-  
+
   setError: (error: string | null): AppAction => ({
     type: 'SET_ERROR',
     payload: error,
   }),
-  
+
   setDetectionResult: (result: DetectionResult): AppAction => ({
     type: 'SET_DETECTION_RESULT',
     payload: result,
   }),
-  
+
   setUploadedImage: (file: File, preview: string): AppAction => ({
     type: 'SET_UPLOADED_IMAGE',
     payload: { file, preview },
   }),
-  
+
   clearDetection: (): AppAction => ({
     type: 'CLEAR_DETECTION',
   }),
-  
+
   addToHistory: (result: DetectionResult): AppAction => ({
     type: 'ADD_TO_HISTORY',
     payload: result,
   }),
-  
+
   setModelStatus: (status: AppState['modelStatus']): AppAction => ({
     type: 'SET_MODEL_STATUS',
     payload: status,
   }),
-  
+
   resetState: (): AppAction => ({
     type: 'RESET_STATE',
   }),

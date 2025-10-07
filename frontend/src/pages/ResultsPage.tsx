@@ -1,5 +1,11 @@
-import React from 'react'
-import { BarChart3, TrendingUp, AlertTriangle, CheckCircle, Download } from 'lucide-react'
+import React from 'react';
+import {
+  BarChart3,
+  TrendingUp,
+  AlertTriangle,
+  CheckCircle,
+  Download,
+} from 'lucide-react';
 
 const ResultsPage: React.FC = () => {
   // Mock data - in real app, this would come from API/state
@@ -15,7 +21,7 @@ const ResultsPage: React.FC = () => {
         denomination: '₦1000',
         result: 'authentic',
         confidence: 98.5,
-        timestamp: '2024-01-15 14:30:22'
+        timestamp: '2024-01-15 14:30:22',
       },
       {
         id: 2,
@@ -23,7 +29,7 @@ const ResultsPage: React.FC = () => {
         denomination: '₦500',
         result: 'fake',
         confidence: 94.2,
-        timestamp: '2024-01-15 14:28:15'
+        timestamp: '2024-01-15 14:28:15',
       },
       {
         id: 3,
@@ -31,10 +37,10 @@ const ResultsPage: React.FC = () => {
         denomination: '₦200',
         result: 'authentic',
         confidence: 99.1,
-        timestamp: '2024-01-15 14:25:08'
-      }
-    ]
-  }
+        timestamp: '2024-01-15 14:25:08',
+      },
+    ],
+  };
 
   const stats = [
     {
@@ -42,30 +48,30 @@ const ResultsPage: React.FC = () => {
       value: mockResults.totalProcessed.toLocaleString(),
       icon: BarChart3,
       color: 'text-blue-600',
-      bgColor: 'bg-blue-100'
+      bgColor: 'bg-blue-100',
     },
     {
       title: 'Authentic Notes',
       value: mockResults.authenticCount.toLocaleString(),
       icon: CheckCircle,
       color: 'text-green-600',
-      bgColor: 'bg-green-100'
+      bgColor: 'bg-green-100',
     },
     {
       title: 'Fake Detected',
       value: mockResults.fakeCount.toLocaleString(),
       icon: AlertTriangle,
       color: 'text-red-600',
-      bgColor: 'bg-red-100'
+      bgColor: 'bg-red-100',
     },
     {
       title: 'Accuracy Rate',
       value: `${mockResults.accuracyRate}%`,
       icon: TrendingUp,
       color: 'text-purple-600',
-      bgColor: 'bg-purple-100'
-    }
-  ]
+      bgColor: 'bg-purple-100',
+    },
+  ];
 
   return (
     <div className="min-h-screen py-12">
@@ -88,8 +94,12 @@ const ResultsPage: React.FC = () => {
                   <stat.icon className={`w-6 h-6 ${stat.color}`} />
                 </div>
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">{stat.title}</p>
-                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    {stat.title}
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stat.value}
+                  </p>
                 </div>
               </div>
             </div>
@@ -106,8 +116,12 @@ const ResultsPage: React.FC = () => {
             <div className="h-64 bg-gray-50 rounded-lg flex items-center justify-center">
               <div className="text-center">
                 <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                <p className="text-gray-500">Chart visualization would go here</p>
-                <p className="text-sm text-gray-400">Integration with Chart.js or similar</p>
+                <p className="text-gray-500">
+                  Chart visualization would go here
+                </p>
+                <p className="text-sm text-gray-400">
+                  Integration with Chart.js or similar
+                </p>
               </div>
             </div>
           </div>
@@ -122,27 +136,36 @@ const ResultsPage: React.FC = () => {
                 <span className="text-sm text-gray-600">90-95%</span>
                 <div className="flex-1 mx-4">
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-yellow-400 h-2 rounded-full" style={{ width: '15%' }}></div>
+                    <div
+                      className="bg-yellow-400 h-2 rounded-full"
+                      style={{ width: '15%' }}
+                    ></div>
                   </div>
                 </div>
                 <span className="text-sm font-medium text-gray-900">15%</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">95-98%</span>
                 <div className="flex-1 mx-4">
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-orange-400 h-2 rounded-full" style={{ width: '25%' }}></div>
+                    <div
+                      className="bg-orange-400 h-2 rounded-full"
+                      style={{ width: '25%' }}
+                    ></div>
                   </div>
                 </div>
                 <span className="text-sm font-medium text-gray-900">25%</span>
               </div>
-              
+
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">98-100%</span>
                 <div className="flex-1 mx-4">
                   <div className="w-full bg-gray-200 rounded-full h-2">
-                    <div className="bg-green-400 h-2 rounded-full" style={{ width: '60%' }}></div>
+                    <div
+                      className="bg-green-400 h-2 rounded-full"
+                      style={{ width: '60%' }}
+                    ></div>
                   </div>
                 </div>
                 <span className="text-sm font-medium text-gray-900">60%</span>
@@ -185,7 +208,7 @@ const ResultsPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {mockResults.recentDetections.map((detection) => (
+                {mockResults.recentDetections.map(detection => (
                   <tr key={detection.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="w-12 h-12 bg-gray-200 rounded-lg flex items-center justify-center">
@@ -200,11 +223,13 @@ const ResultsPage: React.FC = () => {
                       {detection.denomination}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        detection.result === 'authentic'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
+                          detection.result === 'authentic'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-red-100 text-red-800'
+                        }`}
+                      >
                         {detection.result === 'authentic' ? (
                           <>
                             <CheckCircle className="w-3 h-3 mr-1" />
@@ -232,7 +257,7 @@ const ResultsPage: React.FC = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ResultsPage
+export default ResultsPage;

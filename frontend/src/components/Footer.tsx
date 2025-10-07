@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { 
-  Shield, 
-  Github, 
-  Twitter, 
-  Mail, 
+import {
+  Shield,
+  Github,
+  Twitter,
+  Mail,
   Phone,
   MapPin,
-  ExternalLink
+  ExternalLink,
 } from 'lucide-react';
 
 const Footer: React.FC = () => {
@@ -60,11 +60,11 @@ const Footer: React.FC = () => {
                 <span className="text-xl font-bold">NairaGuard</span>
               </div>
               <p className="text-gray-400 text-sm leading-relaxed">
-                Advanced AI-powered counterfeit detection for Nigerian currency. 
+                Advanced AI-powered counterfeit detection for Nigerian currency.
                 Protecting businesses and individuals from fake naira notes.
               </p>
               <div className="flex space-x-4">
-                {socialLinks.map((social) => {
+                {socialLinks.map(social => {
                   const Icon = social.icon;
                   return (
                     <motion.a
@@ -92,7 +92,7 @@ const Footer: React.FC = () => {
             >
               <h3 className="text-lg font-semibold mb-4">Product</h3>
               <ul className="space-y-2">
-                {footerLinks.product.map((link) => (
+                {footerLinks.product.map(link => (
                   <li key={link.name}>
                     {link.external ? (
                       <a
@@ -127,7 +127,7 @@ const Footer: React.FC = () => {
             >
               <h3 className="text-lg font-semibold mb-4">Support</h3>
               <ul className="space-y-2">
-                {footerLinks.support.map((link) => (
+                {footerLinks.support.map(link => (
                   <li key={link.name}>
                     <Link
                       to={link.href}
@@ -150,7 +150,7 @@ const Footer: React.FC = () => {
             >
               <h3 className="text-lg font-semibold mb-4">Legal</h3>
               <ul className="space-y-2">
-                {footerLinks.legal.map((link) => (
+                {footerLinks.legal.map(link => (
                   <li key={link.name}>
                     <Link
                       to={link.href}

@@ -7,26 +7,28 @@ interface LoadingSpinnerProps {
   className?: string;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
-  size = 'md', 
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
+  size = 'md',
   text = 'Loading...',
-  className = ''
+  className = '',
 }) => {
   const sizeClasses = {
     sm: 'w-4 h-4',
     md: 'w-8 h-8',
-    lg: 'w-12 h-12'
+    lg: 'w-12 h-12',
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center space-y-3 ${className}`}>
+    <div
+      className={`flex flex-col items-center justify-center space-y-3 ${className}`}
+    >
       <motion.div
         className={`${sizeClasses[size]} border-2 border-blue-200 border-t-blue-600 rounded-full`}
         animate={{ rotate: 360 }}
         transition={{
           duration: 1,
           repeat: Infinity,
-          ease: 'linear'
+          ease: 'linear',
         }}
       />
       {text && (

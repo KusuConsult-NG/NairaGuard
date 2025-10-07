@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Menu, 
-  X, 
-  Shield, 
-  BarChart3, 
-  Info, 
+import {
+  Menu,
+  X,
+  Shield,
+  BarChart3,
+  Info,
   Home,
   Camera,
-  Settings
+  Settings,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { ApiService } from '../services/api';
@@ -22,7 +22,7 @@ const Header: React.FC = () => {
     model_loaded: boolean;
     preprocessor_loaded: boolean;
   } | null>(null);
-  
+
   const location = useLocation();
   const { state } = useApp();
 
@@ -62,9 +62,7 @@ const Header: React.FC = () => {
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/95 backdrop-blur-md shadow-lg'
-          : 'bg-transparent'
+        isScrolled ? 'bg-white/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
       }`}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -87,7 +85,7 @@ const Header: React.FC = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navigation.map((item) => {
+            {navigation.map(item => {
               const Icon = item.icon;
               return (
                 <Link
@@ -129,7 +127,11 @@ const Header: React.FC = () => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </motion.button>
           </div>
         </div>
@@ -145,7 +147,7 @@ const Header: React.FC = () => {
               className="md:hidden bg-white/95 backdrop-blur-md rounded-lg shadow-lg mt-2 overflow-hidden"
             >
               <div className="px-4 py-2 space-y-1">
-                {navigation.map((item) => {
+                {navigation.map(item => {
                   const Icon = item.icon;
                   return (
                     <Link
@@ -163,7 +165,7 @@ const Header: React.FC = () => {
                     </Link>
                   );
                 })}
-                
+
                 {/* Mobile Model Status */}
                 {modelStatus && (
                   <div className="flex items-center space-x-3 px-3 py-2 border-t border-gray-200">
@@ -173,7 +175,9 @@ const Header: React.FC = () => {
                       }`}
                     />
                     <span className="text-sm text-gray-600">
-                      {modelStatus.model_loaded ? 'Model Ready' : 'Model Loading'}
+                      {modelStatus.model_loaded
+                        ? 'Model Ready'
+                        : 'Model Loading'}
                     </span>
                   </div>
                 )}

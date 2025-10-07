@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import Webcam from 'react-webcam';
-import { 
-  Upload, 
-  Camera, 
-  FileImage, 
-  AlertCircle, 
+import {
+  Upload,
+  Camera,
+  FileImage,
+  AlertCircle,
   CheckCircle,
   Shield,
   Zap,
@@ -15,10 +15,15 @@ import {
   BarChart3,
   ArrowRight,
   X,
-  RotateCcw
+  RotateCcw,
 } from 'lucide-react';
 import { useApp, appActions } from '../context/AppContext';
-import { ApiService, validateImageFile, createImagePreview, handleApiError } from '../services/api';
+import {
+  ApiService,
+  validateImageFile,
+  createImagePreview,
+  handleApiError,
+} from '../services/api';
 import toast from 'react-hot-toast';
 import LoadingSpinner from '../components/LoadingSpinner';
 
@@ -30,47 +35,50 @@ const HomePage: React.FC = () => {
   const webcamRef = useRef<Webcam>(null);
 
   // Handle file drop
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const file = acceptedFiles[0];
-    if (!file) return;
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      if (!file) return;
 
-    // Validate file
-    const validation = validateImageFile(file);
-    if (!validation.valid) {
-      toast.error(validation.error!);
-      return;
-    }
+      // Validate file
+      const validation = validateImageFile(file);
+      if (!validation.valid) {
+        toast.error(validation.error!);
+        return;
+      }
 
-    try {
-      // Create preview
-      const preview = await createImagePreview(file);
-      dispatch(appActions.setUploadedImage(file, preview));
-      
-      // Start detection
-      dispatch(appActions.setLoading(true));
-      const result = await ApiService.predictImage(file);
-      
-      dispatch(appActions.setDetectionResult(result));
-      dispatch(appActions.addToHistory(result));
-      
-      toast.success('Detection completed successfully!');
-      navigate('/result');
-    } catch (error) {
-      const errorMessage = handleApiError(error);
-      dispatch(appActions.setError(errorMessage));
-      toast.error(errorMessage);
-    } finally {
-      dispatch(appActions.setLoading(false));
-    }
-  }, [dispatch, navigate]);
+      try {
+        // Create preview
+        const preview = await createImagePreview(file);
+        dispatch(appActions.setUploadedImage(file, preview));
+
+        // Start detection
+        dispatch(appActions.setLoading(true));
+        const result = await ApiService.predictImage(file);
+
+        dispatch(appActions.setDetectionResult(result));
+        dispatch(appActions.addToHistory(result));
+
+        toast.success('Detection completed successfully!');
+        navigate('/result');
+      } catch (error) {
+        const errorMessage = handleApiError(error);
+        dispatch(appActions.setError(errorMessage));
+        toast.error(errorMessage);
+      } finally {
+        dispatch(appActions.setLoading(false));
+      }
+    },
+    [dispatch, navigate]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/*': ['.jpeg', '.jpg', '.png', '.webp']
+      'image/*': ['.jpeg', '.jpg', '.png', '.webp'],
     },
     multiple: false,
-    maxSize: 10 * 1024 * 1024 // 10MB
+    maxSize: 10 * 1024 * 1024, // 10MB
   });
 
   // Handle camera capture
@@ -86,7 +94,9 @@ const HomePage: React.FC = () => {
       // Convert data URL to File
       const response = await fetch(imageSrc);
       const blob = await response.blob();
-      const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+      const file = new File([blob], 'camera-capture.jpg', {
+        type: 'image/jpeg',
+      });
 
       // Validate and process
       const validation = validateImageFile(file);
@@ -96,14 +106,14 @@ const HomePage: React.FC = () => {
       }
 
       dispatch(appActions.setUploadedImage(file, imageSrc));
-      
+
       // Start detection
       dispatch(appActions.setLoading(true));
       const result = await ApiService.predictImage(file);
-      
+
       dispatch(appActions.setDetectionResult(result));
       dispatch(appActions.addToHistory(result));
-      
+
       toast.success('Detection completed successfully!');
       navigate('/result');
     } catch (error) {
@@ -126,23 +136,26 @@ const HomePage: React.FC = () => {
     {
       icon: Shield,
       title: 'AI-Powered Detection',
-      description: 'Advanced machine learning algorithms detect counterfeit notes with 99%+ accuracy'
+      description:
+        'Advanced machine learning algorithms detect counterfeit notes with 99%+ accuracy',
     },
     {
       icon: Zap,
       title: 'Instant Results',
-      description: 'Get detection results in seconds with detailed confidence scores'
+      description:
+        'Get detection results in seconds with detailed confidence scores',
     },
     {
       icon: Users,
       title: 'Trusted by Many',
-      description: 'Used by banks, businesses, and individuals across Nigeria'
+      description: 'Used by banks, businesses, and individuals across Nigeria',
     },
     {
       icon: BarChart3,
       title: 'Real-time Analytics',
-      description: 'Track detection patterns and get insights into your verification process'
-    }
+      description:
+        'Track detection patterns and get insights into your verification process',
+    },
   ];
 
   const securityFeatures = [
@@ -151,7 +164,7 @@ const HomePage: React.FC = () => {
     'Color-shifting ink detection',
     'Microprinting validation',
     'Holographic element check',
-    'Paper quality assessment'
+    'Paper quality assessment',
   ];
 
   return (
@@ -172,8 +185,9 @@ const HomePage: React.FC = () => {
               </span>
             </h1>
             <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Upload an image or take a photo to instantly verify the authenticity of Nigerian currency. 
-              Our advanced AI technology provides accurate detection in seconds.
+              Upload an image or take a photo to instantly verify the
+              authenticity of Nigerian currency. Our advanced AI technology
+              provides accurate detection in seconds.
             </p>
           </motion.div>
 
@@ -190,7 +204,8 @@ const HomePage: React.FC = () => {
                   Upload Naira Note Image
                 </h2>
                 <p className="text-gray-600">
-                  Drag & drop an image or click to browse. You can also use your camera.
+                  Drag & drop an image or click to browse. You can also use your
+                  camera.
                 </p>
               </div>
 
@@ -204,16 +219,15 @@ const HomePage: React.FC = () => {
                 }`}
               >
                 <input {...getInputProps()} />
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="space-y-4"
-                >
+                <motion.div whileHover={{ scale: 1.05 }} className="space-y-4">
                   <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
                     <Upload className="w-8 h-8 text-blue-600" />
                   </div>
                   <div>
                     <p className="text-lg font-medium text-gray-900">
-                      {isDragActive ? 'Drop the image here' : 'Drag & drop your image here'}
+                      {isDragActive
+                        ? 'Drop the image here'
+                        : 'Drag & drop your image here'}
                     </p>
                     <p className="text-gray-500 mt-2">
                       or click to browse files
@@ -282,9 +296,7 @@ const HomePage: React.FC = () => {
                   <h3 className="text-lg font-semibold text-gray-900 mb-2">
                     {feature.title}
                   </h3>
-                  <p className="text-gray-600 text-sm">
-                    {feature.description}
-                  </p>
+                  <p className="text-gray-600 text-sm">{feature.description}</p>
                 </motion.div>
               );
             })}
