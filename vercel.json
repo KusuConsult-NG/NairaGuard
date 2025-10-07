@@ -14,27 +14,13 @@
       "use": "@vercel/python"
     }
   ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
   "rewrites": [
     {
-      "source": "/admin",
-      "destination": "/index.html"
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
     },
     {
-      "source": "/about",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/((?!api/).*)",
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
