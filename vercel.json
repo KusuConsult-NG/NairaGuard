@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "name": "nairaguard",
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "backend/main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "backend/main.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "frontend/$1"
+    }
+  ],
+  "env": {
+    "PYTHON_VERSION": "3.11",
+    "NODE_VERSION": "18"
+  },
+  "functions": {
+    "backend/main.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.11",
+      "NODE_VERSION": "18"
+    }
+  }
+}

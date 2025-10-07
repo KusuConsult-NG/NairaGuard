@@ -1,0 +1,62 @@
+name: Simple CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # =============================================================================
+  # BASIC CHECKS
+  # =============================================================================
+  basic-checks:
+    name: Basic Checks
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: Install minimal dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r backend/requirements.txt
+        
+    - name: Test basic imports
+      run: |
+        python -c "
+        try:
+            import fastapi
+            import uvicorn
+            import numpy
+            import jwt
+            print('✅ Basic imports successful')
+        except ImportError as e:
+            print(f'❌ Import error: {e}')
+            exit(1)
+        "
+        
+    - name: Check file structure
+      run: |
+        echo "📁 Project structure:"
+        ls -la
+        echo ""
+        echo "📁 Backend structure:"
+        ls -la backend/
+        echo ""
+        echo "📁 Frontend structure:"
+        ls -la frontend/
+        
+    - name: Verify requirements.txt
+      run: |
+        echo "📋 Requirements.txt contents:"
+        cat backend/requirements.txt
+        echo ""
+        echo "📊 Dependency count:"
+        wc -l backend/requirements.txt
