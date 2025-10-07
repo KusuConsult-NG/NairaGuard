@@ -57,16 +57,30 @@ const HomePage = () => {
 
     setLoading(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const response = await fetch('http://localhost:8000/predict', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      setResult(data);
+      // Simulate API call with mock data
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Mock result based on file name or random
+      const mockResults = [
+        {
+          predicted_class: 'genuine',
+          confidence: 0.87,
+          probabilities: [0.87, 0.13],
+          timestamp: new Date().toISOString(),
+          model_status: 'mock_demo'
+        },
+        {
+          predicted_class: 'fake',
+          confidence: 0.92,
+          probabilities: [0.08, 0.92],
+          timestamp: new Date().toISOString(),
+          model_status: 'mock_demo'
+        }
+      ];
+      
+      // Randomly select a result
+      const randomResult = mockResults[Math.floor(Math.random() * mockResults.length)];
+      setResult(randomResult);
     } catch (error) {
       console.error('Error:', error);
     } finally {
