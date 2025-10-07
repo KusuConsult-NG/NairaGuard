@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import './index.css';
 
 // Header Component
@@ -14,21 +14,21 @@ const Header = () => (
           <span className="text-xl font-bold text-gray-900">NairaGuard</span>
         </div>
         <nav className="hidden md:flex space-x-8">
-          <a href="/" className="text-gray-600 hover:text-gray-900 font-medium">
+          <Link to="/" className="text-gray-600 hover:text-gray-900 font-medium">
             Home
-          </a>
-          <a
-            href="/about"
+          </Link>
+          <Link
+            to="/about"
             className="text-gray-600 hover:text-gray-900 font-medium"
           >
             About
-          </a>
-          <a
-            href="/admin"
+          </Link>
+          <Link
+            to="/admin"
             className="text-gray-600 hover:text-gray-900 font-medium"
           >
             Admin
-          </a>
+          </Link>
         </nav>
       </div>
     </div>
