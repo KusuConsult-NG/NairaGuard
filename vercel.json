@@ -1,15 +1,19 @@
 {
   "version": 2,
   "name": "nairaguard",
-  "buildCommand": "cd frontend && npm run build",
-  "outputDirectory": "frontend/dist",
-  "installCommand": "cd frontend && npm install",
-  "framework": "vite",
-  "functions": {
-    "api/*.py": {
-      "runtime": "python3.9"
+  "builds": [
+    {
+      "src": "frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    },
+    {
+      "src": "api/*.py",
+      "use": "@vercel/python@3.0.0"
     }
-  },
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
@@ -17,7 +21,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "/$1"
+      "dest": "frontend/$1"
     }
   ]
 }
