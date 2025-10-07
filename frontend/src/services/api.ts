@@ -96,7 +96,7 @@ export class ApiService {
   }
 
   // Get prediction history
-  static async getPredictionHistory(limit: number = 100): Promise<{
+  static async getPredictionHistory(limit = 100): Promise<{
     predictions: Array<{
       id: number;
       filename: string;
@@ -113,7 +113,7 @@ export class ApiService {
   }
 
   // Reload model
-  static async reloadModel(modelPath: string, modelType: string = 'keras'): Promise<{
+  static async reloadModel(modelPath: string, modelType = 'keras'): Promise<{
     status: string;
     message: string;
     model_type: string;
