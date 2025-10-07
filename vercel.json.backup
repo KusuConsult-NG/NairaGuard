@@ -11,7 +11,10 @@
     },
     {
       "src": "api/*.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "runtime": "python3.9"
+      }
     }
   ],
   "routes": [
@@ -23,5 +26,15 @@
       "src": "/(.*)",
       "dest": "frontend/$1"
     }
-  ]
+  ],
+  "env": {
+    "PYTHON_VERSION": "3.11",
+    "NODE_VERSION": "18"
+  },
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.11",
+      "NODE_VERSION": "18"
+    }
+  }
 }
